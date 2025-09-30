@@ -1,0 +1,654 @@
+Awesome, Saibabu! Here's your modular, example-rich **PySpark RDD workbook section**—from scratch to advanced. This is designed for your SQL/Python mastery project and real-world automation goals.
+
+---
+
+## 🧠 Module: PySpark RDDs (Resilient Distributed Datasets)
+
+### 🔹 What Is an RDD?
+
+An RDD is a **fault-tolerant**, **distributed**, **immutable** collection of elements that can be processed in parallel. It’s the **low-level core** of Spark—ideal when you need fine-grained control over data and transformations.
+
+Here you go, Saibabu! A complete, structured table of **PySpark RDD operations**—including creation, transformations, actions, file I/O, and DataFrame conversion. This is designed for your mastery workbook and real-world automation use.
+
+---
+
+## 📘 PySpark RDD Operations – Full Reference Table
+
+| **Category**        | **Operation**            | **Description**                                                                 | **Example**                                                                 |
+|---------------------|--------------------------|----------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| 🟢 **Creation**      | `parallelize()`          | Create RDD from Python collection                                                | `spark.sparkContext.parallelize([1, 2, 3])`                                  |
+|                     | `textFile()`             | Read text file line-by-line into RDD                                             | `spark.sparkContext.textFile("data.txt")`                                   |
+|                     | `wholeTextFiles()`       | Read multiple files as (filename, content) pairs                                 | `spark.sparkContext.wholeTextFiles("folder/")`                              |
+| 🔄 **Transformations** | `map()`                  | Apply function to each element                                                   | `rdd.map(lambda x: x * 2)`                                                  |
+|                     | `filter()`               | Keep elements that match condition                                               | `rdd.filter(lambda x: x > 10)`                                              |
+|                     | `flatMap()`              | Flatten nested results                                                           | `rdd.flatMap(lambda x: x.split())`                                          |
+|                     | `distinct()`             | Remove duplicates                                                                | `rdd.distinct()`                                                            |
+|                     | `union()`                | Combine two RDDs                                                                 | `rdd1.union(rdd2)`                                                          |
+|                     | `intersection()`         | Common elements between RDDs                                                     | `rdd1.intersection(rdd2)`                                                   |
+|                     | `sample()`               | Random sampling                                                                  | `rdd.sample(False, 0.5)`                                                    |
+|                     | `repartition()`          | Increase number of partitions                                                    | `rdd.repartition(4)`                                                        |
+|                     | `coalesce()`             | Reduce number of partitions                                                      | `rdd.coalesce(2)`                                                           |
+| 🔗 **Pair RDDs**     | `reduceByKey()`          | Aggregate values by key                                                          | `rdd.reduceByKey(lambda x, y: x + y)`                                       |
+|                     | `groupByKey()`           | Group values by key                                                              | `rdd.groupByKey()`                                                          |
+|                     | `mapValues()`            | Apply function only to values                                                    | `rdd.mapValues(lambda x: x * 10)`                                           |
+|                     | `join()`                 | Join two pair RDDs                                                               | `rdd1.join(rdd2)`                                                           |
+|                     | `cogroup()`              | Group multiple RDDs by key                                                       | `rdd1.cogroup(rdd2)`                                                        |
+| ✅ **Actions**       | `collect()`              | Return all elements to driver                                                    | `rdd.collect()`                                                             |
+|                     | `count()`                | Count number of elements                                                         | `rdd.count()`                                                               |
+|                     | `first()`                | Return first element                                                             | `rdd.first()`                                                               |
+|                     | `take(n)`                | Return first n elements                                                          | `rdd.take(3)`                                                               |
+|                     | `reduce()`               | Aggregate using function                                                         | `rdd.reduce(lambda x, y: x + y)`                                            |
+|                     | `foreach()`              | Apply function to each element (no return)                                       | `rdd.foreach(lambda x: print(x))`                                           |
+| 🧊 **Caching**       | `cache()`                | Store RDD in memory                                                              | `rdd.cache()`                                                               |
+|                     | `persist()`              | Store RDD in memory or disk                                                      | `rdd.persist()`                                                             |
+|                     | `unpersist()`            | Remove RDD from cache                                                            | `rdd.unpersist()`                                                           |
+| 📁 **File I/O**      | `saveAsTextFile()`       | Write RDD to text file                                                           | `rdd.saveAsTextFile("output/")`                                             |
+|                     | `saveAsSequenceFile()`   | Write RDD as Hadoop sequence file                                                | `rdd.saveAsSequenceFile("output/")`                                         |
+|                     | `saveAsObjectFile()`     | Write RDD as serialized Java objects                                             | `rdd.saveAsObjectFile("output/")`                                           |
+| 🔁 **Conversion**    | `toDF()`                 | Convert RDD to DataFrame                                                         | `rdd.toDF(["col1", "col2"])`                                                |
+|                     | `rdd` (from DataFrame)   | Convert DataFrame to RDD                                                         | `df.rdd`                                                                    |
+
+---
+
+
+```python
+# From a Python list
+rdd1 = spark.sparkContext.parallelize([10, 20, 30])
+
+# From a text file
+rdd2 = spark.sparkContext.textFile("data.txt")
+
+# From multiple files
+rdd3 = spark.sparkContext.wholeTextFiles("folder/")
+```
+
+---
+
+### 🔸 RDD Transformations (Lazy)
+
+Transformations return a new RDD and are not executed until an action is called.
+
+| Transformation     | Description                          | Example                              |
+|--------------------|--------------------------------------|--------------------------------------|
+| `map()`            | Apply function to each element       | `rdd.map(lambda x: x * 2)`           |
+| `filter()`         | Keep elements that match condition   | `rdd.filter(lambda x: x > 10)`       |
+| `flatMap()`        | Flatten nested results               | `rdd.flatMap(lambda x: x.split())`   |
+| `distinct()`       | Remove duplicates                    | `rdd.distinct()`                     |
+| `union()`          | Combine two RDDs                     | `rdd1.union(rdd2)`                   |
+| `intersection()`   | Common elements                      | `rdd1.intersection(rdd2)`            |
+| `sample()`         | Random sampling                      | `rdd.sample(False, 0.5)`             |
+| `repartition()`    | Increase partitions                  | `rdd.repartition(4)`                 |
+| `coalesce()`       | Reduce partitions                    | `rdd.coalesce(2)`                    |
+
+---
+
+### 🔸 RDD Actions (Trigger Execution)
+
+Actions return results or write data. They trigger computation.
+
+| Action             | Description                          | Example                              |
+|--------------------|--------------------------------------|--------------------------------------|
+| `collect()`        | Return all elements to driver        | `rdd.collect()`                      |
+| `count()`          | Count elements                       | `rdd.count()`                        |
+| `first()`          | First element                        | `rdd.first()`                        |
+| `take(n)`          | First n elements                     | `rdd.take(3)`                        |
+| `reduce()`         | Aggregate using function             | `rdd.reduce(lambda x, y: x + y)`     |
+| `saveAsTextFile()` | Save to disk                         | `rdd.saveAsTextFile("output/")`      |
+
+---
+
+### 🔸 Pair RDDs (Key-Value Format)
+
+Used for joins, grouping, and aggregations.
+
+```python
+rdd = spark.sparkContext.parallelize([("a", 1), ("b", 2), ("a", 3)])
+```
+
+| Operation         | Description                          | Example                              |
+|-------------------|--------------------------------------|--------------------------------------|
+| `reduceByKey()`   | Aggregate by key                     | `rdd.reduceByKey(lambda x, y: x + y)`|
+| `groupByKey()`    | Group values by key                  | `rdd.groupByKey()`                   |
+| `mapValues()`     | Transform only values                | `rdd.mapValues(lambda x: x * 2)`     |
+| `join()`          | Join two pair RDDs                   | `rdd1.join(rdd2)`                    |
+| `cogroup()`       | Group multiple RDDs by key           | `rdd1.cogroup(rdd2)`                 |
+
+---
+
+### 🔸 Caching and Persistence
+
+Use when reusing RDDs multiple times.
+
+```python
+rdd.cache()       # Store in memory
+rdd.persist()     # Memory + disk options
+rdd.unpersist()   # Free memory
+```
+
+---
+
+### 🔸 Advanced Concepts
+
+#### 🔹 Shuffle Operations
+
+- Triggered by `groupByKey`, `join`, `distinct`, etc.
+- Costly—prefer `reduceByKey` over `groupByKey`.
+
+#### 🔹 Shared Variables
+
+| Type              | Use Case                              |
+|-------------------|----------------------------------------|
+| **Broadcast**      | Send read-only data to all nodes       |
+| **Accumulators**   | Aggregation counters (e.g., error count)|
+
+```python
+acc = spark.sparkContext.accumulator(0)
+rdd.foreach(lambda x: acc.add(1))
+```
+
+#### 🔹 Partitioning
+
+Controls data distribution.
+
+```python
+rdd.partitionBy(4)
+```
+
+---
+
+### 🧪 Real-World Example: Word Count
+
+```python
+rdd = spark.sparkContext.textFile("data.txt")
+words = rdd.flatMap(lambda line: line.split())
+pairs = words.map(lambda word: (word, 1))
+counts = pairs.reduceByKey(lambda x, y: x + y)
+counts.saveAsTextFile("wordcount_output")
+```
+
+---
+
+### 🔸 RDD vs DataFrame
+
+| Use RDDs When…                          | Use DataFrames When…                     |
+|----------------------------------------|------------------------------------------|
+| You need fine-grained control          | You want SQL-like operations             |
+| Data is unstructured or complex        | Data is tabular                          |
+| You need custom partitioning           | You want built-in optimization           |
+| You’re building low-level pipelines    | You want Catalyst + Tungsten benefits    |
+
+Absolutely, Saibabu! Let’s walk through **RDD operations in PySpark** with clear examples and expected outputs. I’ll cover both **transformations** and **actions**, showing how each works step-by-step.
+
+---
+
+## 🔄 RDD Transformations (Lazy Operations)
+
+Transformations create new RDDs. They don’t execute until an action is triggered.
+
+### 1. `map()`
+
+Applies a function to each element.
+
+```python
+rdd = spark.sparkContext.parallelize([1, 2, 3])
+mapped = rdd.map(lambda x: x * 2)
+print(mapped.collect())
+```
+
+**Output**:
+```
+[2, 4, 6]
+```
+
+---
+
+### 2. `filter()`
+
+Keeps elements that match a condition.
+
+```python
+rdd = spark.sparkContext.parallelize([10, 15, 20])
+filtered = rdd.filter(lambda x: x > 12)
+print(filtered.collect())
+```
+
+**Output**:
+```
+[15, 20]
+```
+
+---
+
+### 3. `flatMap()`
+
+Splits and flattens results.
+
+```python
+rdd = spark.sparkContext.parallelize(["hello world", "spark rdd"])
+flatmapped = rdd.flatMap(lambda x: x.split())
+print(flatmapped.collect())
+```
+
+**Output**:
+```
+['hello', 'world', 'spark', 'rdd']
+```
+
+---
+
+### 4. `distinct()`
+
+Removes duplicates.
+
+```python
+rdd = spark.sparkContext.parallelize([1, 2, 2, 3])
+distincted = rdd.distinct()
+print(distincted.collect())
+```
+
+**Output**:
+```
+[1, 2, 3]
+```
+
+---
+
+### 5. `union()`
+
+Combines two RDDs.
+
+```python
+rdd1 = spark.sparkContext.parallelize([1, 2])
+rdd2 = spark.sparkContext.parallelize([3, 4])
+unioned = rdd1.union(rdd2)
+print(unioned.collect())
+```
+
+**Output**:
+```
+[1, 2, 3, 4]
+```
+
+---
+
+## ✅ RDD Actions (Trigger Execution)
+
+Actions return results or write data.
+
+### 1. `collect()`
+
+Returns all elements to the driver.
+
+```python
+rdd = spark.sparkContext.parallelize([5, 6, 7])
+print(rdd.collect())
+```
+
+**Output**:
+```
+[5, 6, 7]
+```
+
+---
+
+### 2. `count()`
+
+Counts elements.
+
+```python
+rdd = spark.sparkContext.parallelize(["a", "b", "c"])
+print(rdd.count())
+```
+
+**Output**:
+```
+3
+```
+
+---
+
+### 3. `reduce()`
+
+Aggregates using a function.
+
+```python
+rdd = spark.sparkContext.parallelize([1, 2, 3])
+result = rdd.reduce(lambda x, y: x + y)
+print(result)
+```
+
+**Output**:
+```
+6
+```
+
+---
+
+### 4. `take(n)`
+
+Returns first n elements.
+
+```python
+rdd = spark.sparkContext.parallelize([10, 20, 30])
+print(rdd.take(2))
+```
+
+**Output**:
+```
+[10, 20]
+```
+
+---
+
+### 5. `first()`
+
+Returns the first element.
+
+```python
+rdd = spark.sparkContext.parallelize(["apple", "banana"])
+print(rdd.first())
+```
+
+**Output**:
+```
+'apple'
+```
+
+---
+
+## 🔗 Pair RDD Operations (Key-Value)
+
+### 1. `reduceByKey()`
+
+Aggregates values by key.
+
+```python
+rdd = spark.sparkContext.parallelize([("a", 1), ("b", 2), ("a", 3)])
+reduced = rdd.reduceByKey(lambda x, y: x + y)
+print(reduced.collect())
+```
+
+**Output**:
+```
+[('a', 4), ('b', 2)]
+```
+
+---
+
+### 2. `groupByKey()`
+
+Groups values by key.
+
+```python
+rdd = spark.sparkContext.parallelize([("x", 1), ("x", 2), ("y", 3)])
+grouped = rdd.groupByKey().mapValues(list)
+print(grouped.collect())
+```
+
+**Output**:
+```
+[('x', [1, 2]), ('y', [3])]
+```
+Great question, Saibabu! Let’s break down `mapValues()` in PySpark RDDs with clarity and examples.
+
+---
+
+## 🔹 What Is `mapValues()`?
+
+`mapValues()` is a transformation used on **Pair RDDs** (i.e., RDDs with key-value pairs). It applies a function **only to the values**, leaving the keys unchanged.
+
+### 📌 Syntax:
+```python
+rdd.mapValues(function)
+```
+
+---
+
+## 🧪 Example 1: Multiply Each Value
+
+```python
+rdd = spark.sparkContext.parallelize([("a", 2), ("b", 3), ("a", 4)])
+mapped = rdd.mapValues(lambda x: x * 10)
+print(mapped.collect())
+```
+
+### ✅ Output:
+```
+[('a', 20), ('b', 30), ('a', 40)]
+```
+
+- Keys (`'a'`, `'b'`) stay the same.
+- Values (`2`, `3`, `4`) are multiplied by 10.
+
+---
+
+## 🧪 Example 2: Convert Values to Strings
+
+```python
+rdd = spark.sparkContext.parallelize([("x", 100), ("y", 200)])
+mapped = rdd.mapValues(lambda x: f"₹{x}")
+print(mapped.collect())
+```
+
+### ✅ Output:
+```
+[('x', '₹100'), ('y', '₹200')]
+```
+
+---
+
+## 🔍 Why Use `mapValues()`?
+
+- It’s cleaner than using `map()` when working with key-value pairs.
+- Avoids touching the keys.
+- Often used after `groupByKey()` or `reduceByKey()`.
+
+---
+
+## 🔄 Comparison: `map()` vs `mapValues()`
+
+```python
+rdd = spark.sparkContext.parallelize([("a", 1), ("b", 2)])
+
+# map() affects both key and value
+rdd.map(lambda kv: (kv[0].upper(), kv[1] * 2)).collect()
+# → [('A', 2), ('B', 4)]
+
+# mapValues() affects only value
+rdd.mapValues(lambda v: v * 2).collect()
+# → [('a', 2), ('b', 4)]
+```
+Perfect! Let’s walk through a full **PySpark RDD pipeline** using `mapValues()` and related operations—just like you’d use in a real-world sales or word count scenario. I’ll show each step with code, output, and reasoning.
+
+---
+
+## 🧪 Scenario: Aggregating Sales by Region
+
+Imagine you have raw sales data like this:
+
+```python
+data = [("North", 100), ("South", 200), ("North", 150), ("East", 300)]
+rdd = spark.sparkContext.parallelize(data)
+```
+
+---
+
+### 🔹 Step 1: `mapValues()` to Add Tax
+
+Let’s say you want to add 10% tax to each sale.
+
+```python
+taxed = rdd.mapValues(lambda x: x * 1.10)
+print(taxed.collect())
+```
+
+**✅ Output**:
+```
+[('North', 110.0), ('South', 220.0), ('North', 165.0), ('East', 330.0)]
+```
+
+- Only the **values** are modified.
+- Keys (`'North'`, `'South'`, etc.) stay the same.
+
+---
+
+### 🔹 Step 2: `reduceByKey()` to Aggregate Sales
+
+Now let’s total sales per region.
+
+```python
+total_sales = taxed.reduceByKey(lambda x, y: x + y)
+print(total_sales.collect())
+```
+
+**✅ Output**:
+```
+[('South', 220.0), ('East', 330.0), ('North', 275.0)]
+```
+
+- `'North'` had two entries: 110 + 165 = 275
+- `'South'` and `'East'` had one each
+
+---
+
+### 🔹 Step 3: `mapValues()` to Format as Strings
+
+Let’s format the totals for reporting.
+
+```python
+formatted = total_sales.mapValues(lambda x: f"₹{x:.2f}")
+print(formatted.collect())
+```
+
+**✅ Output**:
+```
+[('South', '₹220.00'), ('East', '₹330.00'), ('North', '₹275.00')]
+```
+
+---
+
+## 🔁 Bonus: Word Count with `mapValues()`
+
+```python
+lines = spark.sparkContext.parallelize(["hello world", "hello spark"])
+words = lines.flatMap(lambda x: x.split())
+pairs = words.map(lambda word: (word, 1))
+counts = pairs.reduceByKey(lambda x, y: x + y)
+formatted = counts.mapValues(lambda x: f"{x} times")
+print(formatted.collect())
+```
+
+**✅ Output**:
+```
+[('world', '1 times'), ('spark', '1 times'), ('hello', '2 times')]
+```
+
+---
+
+## 🔍 Summary: Why `mapValues()` Rocks
+
+- Keeps your keys intact.
+- Cleaner than `map()` for key-value RDDs.
+- Ideal for formatting, scaling, or transforming values post-aggregation.
+
+
+Let’s go full throttle, Saibabu! Here's how we’ll expand your PySpark mastery workbook:
+
+---
+
+## 🧪 Practice Challenge Set: RDD Operations
+
+Each challenge is designed to reinforce a specific transformation or action.
+
+### 🔹 Challenge 1: `map()` + `filter()`
+**Task**: Given `[5, 10, 15, 20]`, double each number and keep only those > 20.
+
+```python
+rdd = spark.sparkContext.parallelize([5, 10, 15, 20])
+result = rdd.map(lambda x: x * 2).filter(lambda x: x > 20)
+```
+
+**Expected Output**:
+```
+[30, 40]
+```
+
+---
+
+### 🔹 Challenge 2: `flatMap()` + `distinct()`
+**Task**: Split sentences into words and remove duplicates.
+
+```python
+rdd = spark.sparkContext.parallelize(["hello world", "hello spark"])
+result = rdd.flatMap(lambda x: x.split()).distinct()
+```
+
+**Expected Output**:
+```
+['hello', 'world', 'spark']
+```
+
+---
+
+### 🔹 Challenge 3: `reduceByKey()` + `mapValues()`
+**Task**: Aggregate scores and format as `"Score: X"`.
+
+```python
+rdd = spark.sparkContext.parallelize([("A", 10), ("B", 20), ("A", 30)])
+result = rdd.reduceByKey(lambda x, y: x + y).mapValues(lambda x: f"Score: {x}")
+```
+
+**Expected Output**:
+```
+[('A', 'Score: 40'), ('B', 'Score: 20')]
+```
+
+---
+
+### 🔹 Challenge 4: `groupByKey()` + `mapValues()`
+**Task**: Group values and convert to sorted lists.
+
+```python
+rdd = spark.sparkContext.parallelize([("x", 3), ("x", 1), ("y", 2)])
+result = rdd.groupByKey().mapValues(lambda vals: sorted(list(vals)))
+```
+
+**Expected Output**:
+```
+[('x', [1, 3]), ('y', [2])]
+```
+
+---
+
+### 🔹 Challenge 5: `sample()` + `count()`
+**Task**: Randomly sample 50% of `[1,2,3,4,5,6]` and count.
+
+```python
+rdd = spark.sparkContext.parallelize([1, 2, 3, 4, 5, 6])
+sampled = rdd.sample(False, 0.5)
+count = sampled.count()
+```
+
+**Expected Output**: Varies (e.g., `3`)
+
+---
+
+## 🔁 RDD ↔️ DataFrame Conversion
+
+### 🔹 RDD to DataFrame
+
+```python
+rdd = spark.sparkContext.parallelize([(1, "Alice"), (2, "Bob")])
+df = rdd.toDF(["id", "name"])
+df.show()
+```
+
+---
+
+### 🔹 DataFrame to RDD
+
+```python
+df = spark.createDataFrame([(1, "Alice"), (2, "Bob")], ["id", "name"])
+rdd = df.rdd
+print(rdd.collect())
+```
